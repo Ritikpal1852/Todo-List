@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To do list</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <style>
+    h1{
+      color: rgb(255, 0, 0);
+      text-align: center;
+    }
+  </style>
+</head>
+<!-- html code -->
+<body>
+  <h1>ToDo List</h1>
+  <div class="container col-5 mt-9">
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Work For Do" aria-label="Recipient's username" aria-describedby="button-addon2">
+    <button id="add_btn" class="btn btn-outline-secondary" type="button" id="button-addon2">add</button>
+  </div>
+  <ul id="parentList" class="list-group">
+    <li class="list-group-item d-flex justify-content-between" >
+      <h3 class="flex-grow-1">Work</h3>
+      <button class="btn btn-warning" onclick="edittodo(this)" >edit</button>
+      <button class="btn btn-danger mx-3" onclick="removetodo(this)">Remove</button>
+      
+     </li>
+  </ul>
+  </div>
+
+
+<!-- ------------Javascript code -------------->
+  <script>
+//select the button (which want to act)
+    let addbtn= document.getElementById("add_btn")
+//to do a change we done by the help of addenentlistener in bracket we take action(click) and fucntion which takes change code
+    addbtn.addEventListener("click", addtodo)
+    let parentList= document.getElementById('parentList')
+//function
+    function addtodo(e){
+      if(parentList.children[0].className== 'emptyMsg'){
+        parentList.children[0].remove()
+      }
+        let currentbtn= e.currentTarget;
+        let currentinput= currentbtn.previousElementSibling
+        if(currentinput.value ==""){
+          alert("please write some work first");
+          return false;
+        }
+// for check= console.log(currentinput.value)
+//for add next todo list we made a new element
+        let newLi= document.createElement("li")
+        newLi.classList.add("list-group-item")  // for add same cls
+        let currenttodo = currentinput.value
+//use innerelement
+        newLi.className= "list-group-item d-flex justify-content-between"
+        newLi.innerHTML=`<h3 class="flex-grow-1">${currenttodo}</h3>
+        <button class="btn btn-warning" onclick="edittodo(this)" >edit</button>
+        <button class="btn btn-danger mx-3" onclick="removetodo(this)">Remove</button>`
+//for append the list in ul 
+         parentList.appendChild(newLi)
+        //after the add work, for do empty the input in input
+         currentinput.value="";
+       }
+// new funcion for remove btn
+        function removetodo(currelement){
+            currelement.parentElement.remove()
+            let parentList= document.getElementById('parentList')
+            if(parentList.children.length <=0){
+              let newEmptyMsg= document.createElement("h3")
+              newEmptyMsg.classList.add('emptyMsg')
+              newEmptyMsg.textContent= "Nothing is here. please add some work"
+              parentList.appendChild(newEmptyMsg)
+            }
+        }
+// new function for edit text in input
+        function edittodo(currelement){
+          if(currelement.textContent== "Add"){
+            currelement.textContent= "edit"
+            let currwork = currelement.previousElementSibling.value
+            let currheading= document.createElement("h3")
+            currheading.className= "flex-grow-1"
+            currheading.textContent= currwork
+            currelement.parentElement.replaceChild(currheading, currelement.previousElementSibling)
+          }
+          else{
+          currelement.textContent= "Add"
+           let currwork= currelement.previousElementSibling.textContent
+           let currInput= document.createElement('input');
+          currInput.className= "form-control"
+           currInput.placeholder= "work name";
+           currInput.value= currwork;
+
+           currelement.parentElement.replaceChild(currInput, currelement.previousElementSibling)
+        }
+      }
+  </script>
+</body>
+</html>
